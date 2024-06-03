@@ -32,11 +32,42 @@
     Using this model several expirements done.
 
     \section{Example}
-    \begin{figure}
+    The following plot gives an example of a message with an error probability of $0.3$. When $p_1 \neq 0$, the error occurs when sending from the sender to the receiver and the correct value arrives never at the receiver. When $p_2 \neq 0$, the correct value does end up at the receiver, but is still sent again by the sender since it thinks that an error has occured, which can be seen in \ref{fig:example}.
+    \begin{figure}[H]
+        \centering
         \includesvg[width = \textwidth]{example_SandW.svg}
+        \caption{Received values for a linear input $M=\begin{bmatrix} 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \end{bmatrix}$. The values $-1$ indicate that an error has occured.}
+        \label{fig:example}
     \end{figure}
 
-    \newpage
+    \section{Experiments}
+    \subsection{Varying the size of the message}
+    When varying the size without any errors, the number of iterations is the same as the size. This is since every value is immediately passed correctly to the receiver.
+    \begin{figure}[H]
+        \centering
+        \includesvg[width = 0.4\textwidth]{size_experiment.svg}
+        \caption{Number of iterations for different sizes of $M$, but $p_1=p_2=0$}
+        \label{fig:size_experiment}
+    \end{figure}
+
+    \subsection{Varying the error when sending from sender to receiver}
+    \label{sec:experiment_2}
+    When varying the error probability $p_1$ the plot in figure \ref{fig:p1_experiment} is obtained. When the value of $p_1=0$, the result is equal to plot \ref{fig:size_experiment} and when the value gets very high, there are almost no values that get transferred correctly. It takes therefore very many tries to finally get everything through correctly.
+    \begin{figure}[H]
+        \centering
+        \includesvg[width = 0.4\textwidth]{p1_experiment.svg}
+        \caption{Number of iterations for different values of $p_1$, with $p_2=0$ and $\text{size}(M)=200$. The plot is obtained by averaging ten runs of this experiment.}
+        \label{fig:p1_experiment}
+    \end{figure}
+
+    \subsection{Varying all errors}
+    When varying the error probability $p_1$ and $p_2$ the plot in figure \ref{fig:p_experiment} is obtained. The logic behind the shape of the graph is the same as in experiment 2, but more extreme since there are two places where the transmission can go wrong. Namely from sender to receiver ($p_1$) and from receiver to sender ($p_2$).
+    \begin{figure}[H]
+        \centering
+        \includesvg[width = 0.4\textwidth]{p_experiment.svg}
+        \caption{Number of iterations for different values of $p_1=p_2$, with $\text{size}(M)=100$. The plot is obtained by averaging ten runs of this experiment.}
+        \label{fig:p_experiment}
+    \end{figure}   
     \section{Code}
     The code is also provided seperately and is on \href{https://github.com/SjdTl/Data-communications-networking.git}{\color{blue}github}.
     \inputminted[breaklines=true]{python3}{Stop-and-wait_protocol.py}
