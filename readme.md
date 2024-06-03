@@ -16,3 +16,4 @@ The parameters are explained in the docstring in the code.
 # Other files in this [repository](https://github.com/SjdTl/Data-communications-networking.git).
 - .svg files are output of the example and expirements
 - report.tex is the report (and report.pdf the output)
+- Some folder for latex compilation of code (minted) and svg (inkscape)
