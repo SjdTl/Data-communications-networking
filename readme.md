@@ -13,4 +13,6 @@ It is also possible to create a new expirement by running the main function dire
 main(n = 4, M_size = 4, p1 = 0.2, p2 = 0.2, linear = False)
 ```
 The parameters are explained in the docstring in the code.
-# Other files in this (repository)[https://github.com/SjdTl/Data-communications-networking.git].
+# Other files in this [repository](https://github.com/SjdTl/Data-communications-networking.git).
+- .svg files are output of the example and expirements
+- report.tex is the report (and report.pdf the output)
