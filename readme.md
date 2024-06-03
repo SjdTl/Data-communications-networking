@@ -1,5 +1,5 @@
 # How to run
-To obtain the results given in the report, the only thing that is required is to run the python file. 
+To obtain the results given in the report, the only thing that is required is to run the python file **Stop-and-wait_protocol.py**. 
 # Changing parameters
 It is possible to only run part of the code by changing the boolean values given after the functions:
 ```python
