@@ -1,0 +1,242 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{c+c1}{\PYGZsh{} Path}
+\PYG{k+kn}{import} \PYG{n+nn}{os}
+\PYG{n}{dir\PYGZus{}path} \PYG{o}{=} \PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{dirname}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{realpath}\PYG{p}{(}\PYG{n+nv+vm}{\PYGZus{}\PYGZus{}file\PYGZus{}\PYGZus{}}\PYG{p}{))}
+
+\PYG{c+c1}{\PYGZsh{} IEEE plots}
+\PYG{k+kn}{import} \PYG{n+nn}{scienceplots}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{style}\PYG{o}{.}\PYG{n}{use}\PYG{p}{([}\PYG{l+s+s1}{\PYGZsq{}science\PYGZsq{}}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}ieee\PYGZsq{}}\PYG{p}{])}
+
+\PYG{c+c1}{\PYGZsh{} Progress bar}
+\PYG{k+kn}{import} \PYG{n+nn}{tqdm}
+
+\PYG{k}{def} \PYG{n+nf}{corrupt}\PYG{p}{(}\PYG{n}{p}\PYG{p}{,} \PYG{n}{df}\PYG{p}{):}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Description}
+\PYG{l+s+sd}{    \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{    Corruption of a message with probability p}
+
+\PYG{l+s+sd}{    Example }
+\PYG{l+s+sd}{    \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{    \PYGZgt{}\PYGZgt{}\PYGZgt{} df = [1, 0, 72]}
+\PYG{l+s+sd}{    \PYGZgt{}\PYGZgt{}\PYGZgt{} p = 1}
+\PYG{l+s+sd}{    \PYGZgt{}\PYGZgt{}\PYGZgt{} print(corrupt(p, df))}
+\PYG{l+s+sd}{    [0, 0, 72]}
+
+\PYG{l+s+sd}{    \PYGZgt{}\PYGZgt{}\PYGZgt{} df = [1, 0, 72]}
+\PYG{l+s+sd}{    \PYGZgt{}\PYGZgt{}\PYGZgt{} p = 0}
+\PYG{l+s+sd}{    \PYGZgt{}\PYGZgt{}\PYGZgt{} print(corrupt(p, df))}
+\PYG{l+s+sd}{    [1, 0, 72]}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+    \PYG{k}{if} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{random}\PYG{p}{()} \PYG{o}{\PYGZlt{}} \PYG{n}{p}\PYG{p}{:}
+        \PYG{k}{return} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{df}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{df}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]]}
+    \PYG{k}{else}\PYG{p}{:}
+        \PYG{k}{return} \PYG{n}{df}
+
+\PYG{k}{def} \PYG{n+nf}{main}\PYG{p}{(}\PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{p}{,}
+         \PYG{n}{M\PYGZus{}size} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{p}{,}
+         \PYG{n}{p1} \PYG{o}{=} \PYG{l+m+mf}{0.2}\PYG{p}{,}
+         \PYG{n}{p2} \PYG{o}{=} \PYG{l+m+mf}{0.2}\PYG{p}{,}
+         \PYG{n}{linear} \PYG{o}{=} \PYG{k+kc}{False}\PYG{p}{):}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Description}
+\PYG{l+s+sd}{    \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{    Main function to loop through the message M}
+\PYG{l+s+sd}{    This message is chosen randomly with size M\PYGZus{}size and the integers are in range [0, 2\PYGZca{}n \PYGZhy{} 1]}
+
+\PYG{l+s+sd}{    If linear = True the message is linear, e.g. M = [1, 2, 3, 4, 5]}
+
+\PYG{l+s+sd}{    Inputs }
+\PYG{l+s+sd}{    \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{    n : integer}
+\PYG{l+s+sd}{        Range of M: [0, 2\PYGZca{}n \PYGZhy{} 1]}
+\PYG{l+s+sd}{    M\PYGZus{}size : integer}
+\PYG{l+s+sd}{        Size of M}
+\PYG{l+s+sd}{    p1 : float}
+\PYG{l+s+sd}{        Probability of an error occuring when transmitting a message from sender to receiver}
+\PYG{l+s+sd}{    p2 : float}
+\PYG{l+s+sd}{        Probability of an error occuring when transmitting an acknowledgement from receiver to sender}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    Outputs }
+\PYG{l+s+sd}{    \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{    R : np.array of integers}
+\PYG{l+s+sd}{        Values that the receiver has received, \PYGZhy{}1 indicates that an errors has occured}
+\PYG{l+s+sd}{    M : np.array of integers}
+\PYG{l+s+sd}{        Message}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    
+    \PYG{k}{if} \PYG{n}{linear} \PYG{o}{==} \PYG{k+kc}{False}\PYG{p}{:}
+        \PYG{n}{M} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randint}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{o}{**}\PYG{n}{n}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{size}\PYG{o}{=}\PYG{n}{M\PYGZus{}size}\PYG{p}{)}
+    \PYG{k}{else}\PYG{p}{:}
+        \PYG{n}{M} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{int32}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{o}{**}\PYG{n}{n}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{M\PYGZus{}size}\PYG{p}{))}
+
+    \PYG{n}{R} \PYG{o}{=} \PYG{p}{[]}
+
+    \PYG{n}{ACK\PYGZus{}frame} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]} \PYG{c+c1}{\PYGZsh{} = [error, frame, message]}
+    \PYG{n}{timer\PYGZus{}value} \PYG{o}{=} \PYG{l+m+mi}{0}
+    \PYG{n}{nS} \PYG{o}{=} \PYG{l+m+mi}{0}
+    \PYG{n}{nR} \PYG{o}{=} \PYG{l+m+mi}{0}
+    \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}
+    
+    \PYG{k}{while} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{M}\PYG{p}{):}
+        \PYG{n}{dataFrame}\PYG{p}{,} \PYG{n}{timer\PYGZus{}value}\PYG{p}{,} \PYG{n}{nS}\PYG{p}{,} \PYG{n}{i} \PYG{o}{=} \PYG{n}{sender}\PYG{p}{(}\PYG{n}{ACK\PYGZus{}frame} \PYG{o}{=} \PYG{n}{ACK\PYGZus{}frame}\PYG{p}{,} \PYG{n}{timer\PYGZus{}value} \PYG{o}{=} \PYG{n}{timer\PYGZus{}value}\PYG{p}{,} \PYG{n}{nS} \PYG{o}{=} \PYG{n}{nS}\PYG{p}{,} \PYG{n}{next\PYGZus{}integer} \PYG{o}{=} \PYG{n}{M}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{buffered\PYGZus{}integer} \PYG{o}{=} \PYG{n}{M}\PYG{p}{[}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{i}\PYG{o}{=}\PYG{n}{i}\PYG{p}{)}
+        \PYG{n}{dataFrame} \PYG{o}{=} \PYG{n}{corrupt}\PYG{p}{(}\PYG{n}{p1}\PYG{p}{,} \PYG{n}{dataFrame}\PYG{p}{)}
+        \PYG{n}{ACK\PYGZus{}frame}\PYG{p}{,} \PYG{n}{nR} \PYG{o}{=} \PYG{n}{receiver}\PYG{p}{(}\PYG{n}{arrived\PYGZus{}frame} \PYG{o}{=} \PYG{n}{dataFrame}\PYG{p}{,} \PYG{n}{nR} \PYG{o}{=} \PYG{n}{nR}\PYG{p}{)}
+        \PYG{n}{ACK\PYGZus{}frame} \PYG{o}{=} \PYG{n}{corrupt}\PYG{p}{(}\PYG{n}{p2}\PYG{p}{,} \PYG{n}{ACK\PYGZus{}frame}\PYG{p}{)}
+
+        \PYG{n}{R}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{ACK\PYGZus{}frame}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{])}
+    \PYG{k}{return} \PYG{n}{R}\PYG{p}{,} \PYG{n}{M}
+
+\PYG{k}{def} \PYG{n+nf}{sender}\PYG{p}{(}\PYG{n}{ACK\PYGZus{}frame}\PYG{p}{,} \PYG{n}{timer\PYGZus{}value}\PYG{p}{,} \PYG{n}{nS}\PYG{p}{,} \PYG{n}{next\PYGZus{}integer}\PYG{p}{,} \PYG{n}{buffered\PYGZus{}integer}\PYG{p}{,} \PYG{n}{i}\PYG{p}{):}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Description}
+\PYG{l+s+sd}{    \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{    Sender code}
+\PYG{l+s+sd}{    Send a new message if no error has occured and the frames align}
+\PYG{l+s+sd}{    Send previous message if this is not the case}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{n}{timer\PYGZus{}value} \PYG{o}{+=} \PYG{l+m+mi}{1}
+    \PYG{k}{if} \PYG{p}{(}\PYG{n}{ACK\PYGZus{}frame}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{1} \PYG{o+ow}{and} \PYG{n}{ACK\PYGZus{}frame}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{==} \PYG{n}{nS}\PYG{p}{)} \PYG{o+ow}{or} \PYG{n}{i} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+        \PYG{c+c1}{\PYGZsh{} If there is no corruption and the n align, sent the next integer (with its corresponding n)}
+        \PYG{c+c1}{\PYGZsh{} and update nS for the next integer}
+        \PYG{n}{timer\PYGZus{}value} \PYG{o}{=} \PYG{l+m+mi}{0}
+        \PYG{n}{i} \PYG{o}{+=} \PYG{l+m+mi}{1}
+        \PYG{n}{df} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{nS}\PYG{p}{,} \PYG{n}{next\PYGZus{}integer}\PYG{p}{]}
+        \PYG{n}{nS} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{o+ow}{not}\PYG{p}{(}\PYG{n}{nS}\PYG{p}{))}
+    \PYG{k}{else}\PYG{p}{:}
+        \PYG{c+c1}{\PYGZsh{} If there is corruption or the n do not align, sent the previous integer again (with its corresponding n)}
+        \PYG{n}{df} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n+nb}{int}\PYG{p}{(}\PYG{o+ow}{not}\PYG{p}{(}\PYG{n}{nS}\PYG{p}{)),} \PYG{n}{buffered\PYGZus{}integer}\PYG{p}{]}
+    \PYG{k}{return} \PYG{n}{df}\PYG{p}{,} \PYG{n}{timer\PYGZus{}value}\PYG{p}{,} \PYG{n}{nS}\PYG{p}{,} \PYG{n}{i}
+
+\PYG{k}{def} \PYG{n+nf}{receiver}\PYG{p}{(}\PYG{n}{arrived\PYGZus{}frame}\PYG{p}{,} \PYG{n}{nR}\PYG{p}{):}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Description}
+\PYG{l+s+sd}{    \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{l+s+sd}{    Receiver code}
+\PYG{l+s+sd}{    Confirm if the frames align and no error has occured}
+\PYG{l+s+sd}{    Otherwise simulate not sending anything by sending an error}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{k}{if} \PYG{n}{arrived\PYGZus{}frame}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{1}\PYG{p}{:}
+        \PYG{k}{if} \PYG{n}{arrived\PYGZus{}frame}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{==} \PYG{n}{nR}\PYG{p}{:}
+            \PYG{c+c1}{\PYGZsh{} If there is no corruption and the n align, confirm this }
+            \PYG{c+c1}{\PYGZsh{} and updata nR to expect the following frame }
+            \PYG{n}{nR} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{o+ow}{not}\PYG{p}{(}\PYG{n}{nR}\PYG{p}{))}
+            \PYG{k}{return} \PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{nR}\PYG{p}{,} \PYG{n}{arrived\PYGZus{}frame}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]],} \PYG{n}{nR}
+        \PYG{k}{else}\PYG{p}{:}
+            \PYG{c+c1}{\PYGZsh{} If there is no corruption, but the n don\PYGZsq{}t align, don\PYGZsq{}t sent anything (or in this simplified case, sent that there is corruption)}
+            \PYG{c+c1}{\PYGZsh{} and updata nR to expect the corrupted frame again}
+            \PYG{n}{nR} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{o+ow}{not}\PYG{p}{(}\PYG{n}{nR}\PYG{p}{))}
+            \PYG{k}{return} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{nR}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{nR}
+    \PYG{k}{else}\PYG{p}{:}
+        \PYG{c+c1}{\PYGZsh{} If there is corruption, don\PYGZsq{}t sent anything (or in this simplified case, sent that there is corruption)}
+        \PYG{k}{return} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{nR}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{nR}
+
+\PYG{c+c1}{\PYGZsh{} Toggle experiments}
+\PYG{n}{give\PYGZus{}an\PYGZus{}example} \PYG{o}{=} \PYG{k+kc}{True}
+\PYG{n}{do\PYGZus{}experiment\PYGZus{}1} \PYG{o}{=} \PYG{k+kc}{True}
+\PYG{n}{do\PYGZus{}experiment\PYGZus{}2} \PYG{o}{=} \PYG{k+kc}{True}
+\PYG{n}{do\PYGZus{}experiment\PYGZus{}3} \PYG{o}{=} \PYG{k+kc}{True}
+
+\PYG{k}{if} \PYG{n}{give\PYGZus{}an\PYGZus{}example} \PYG{o}{==} \PYG{k+kc}{True}\PYG{p}{:}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Creating an example\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{3}
+    \PYG{n}{p} \PYG{o}{=} \PYG{l+m+mf}{0.3}
+
+    \PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{7}\PYG{p}{,}\PYG{l+m+mi}{3}\PYG{p}{))}
+
+    \PYG{n}{R}\PYG{p}{,} \PYG{n}{M} \PYG{o}{=} \PYG{n}{main}\PYG{p}{(}\PYG{n}{n}\PYG{o}{=}\PYG{n}{n}\PYG{p}{,} \PYG{n}{M\PYGZus{}size} \PYG{o}{=} \PYG{l+m+mi}{2}\PYG{o}{**}\PYG{n}{n}\PYG{p}{,} \PYG{n}{p1} \PYG{o}{=} \PYG{n}{p}\PYG{p}{,} \PYG{n}{p2} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{linear} \PYG{o}{=} \PYG{k+kc}{True}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{stem}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{R}\PYG{p}{),}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{R}\PYG{p}{)),} \PYG{n}{R}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}Receiver for \PYGZdl{}p\PYGZus{}1=}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{p}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Iteration\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Value\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{R}\PYG{p}{,} \PYG{n}{M} \PYG{o}{=} \PYG{n}{main}\PYG{p}{(}\PYG{n}{n}\PYG{o}{=}\PYG{n}{n}\PYG{p}{,} \PYG{n}{M\PYGZus{}size} \PYG{o}{=} \PYG{l+m+mi}{2}\PYG{o}{**}\PYG{n}{n}\PYG{p}{,} \PYG{n}{p1} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{p2} \PYG{o}{=} \PYG{n}{p}\PYG{p}{,} \PYG{n}{linear} \PYG{o}{=} \PYG{k+kc}{True}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{.}\PYG{n}{stem}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{R}\PYG{p}{),}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{R}\PYG{p}{)),} \PYG{n}{R}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}Receiver for \PYGZdl{}p\PYGZus{}2=}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{p}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Iteration\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Value\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{suptitle}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Received value at receiver for a linear message\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{dir\PYGZus{}path}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}example\PYGZus{}SandW.svg\PYGZdq{}}\PYG{p}{))}
+
+\PYG{k}{if} \PYG{n}{do\PYGZus{}experiment\PYGZus{}1} \PYG{o}{==} \PYG{k+kc}{True}\PYG{p}{:}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Running experiment 1:\PYGZdq{}}\PYG{p}{)}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Number of loop iterations for different message sizes\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{5}
+    \PYG{n}{loop\PYGZus{}iterations} \PYG{o}{=} \PYG{p}{[]}
+    \PYG{n}{M\PYGZus{}sizes} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1000}\PYG{p}{,} \PYG{l+m+mi}{20}\PYG{p}{)}
+    \PYG{k}{for} \PYG{n}{M\PYGZus{}size} \PYG{o+ow}{in} \PYG{n}{tqdm}\PYG{o}{.}\PYG{n}{tqdm}\PYG{p}{(}\PYG{n}{M\PYGZus{}sizes}\PYG{p}{):}
+        \PYG{n}{R}\PYG{p}{,} \PYG{n}{M} \PYG{o}{=} \PYG{n}{main}\PYG{p}{(}\PYG{n}{n} \PYG{o}{=} \PYG{n}{n}\PYG{p}{,} \PYG{n}{M\PYGZus{}size} \PYG{o}{=} \PYG{n}{M\PYGZus{}size}\PYG{p}{,} \PYG{n}{p1} \PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{p2} \PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+        \PYG{n}{loop\PYGZus{}iterations}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{R}\PYG{p}{))}
+
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Plotting experiment 1\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{()}
+
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{M\PYGZus{}sizes}\PYG{p}{,} \PYG{n}{loop\PYGZus{}iterations}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Loop iterations necessary for a certain size without errors\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Size \PYGZdl{}S\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Loop iterations \PYGZdl{}T\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{dir\PYGZus{}path}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}size\PYGZus{}experiment.svg\PYGZdq{}}\PYG{p}{))}
+
+\PYG{k}{if} \PYG{n}{do\PYGZus{}experiment\PYGZus{}2} \PYG{o}{==} \PYG{k+kc}{True}\PYG{p}{:}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Running experiment 2:\PYGZdq{}}\PYG{p}{)}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Number of loop iterations for different values of p1\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{5}
+    \PYG{n}{M\PYGZus{}size} \PYG{o}{=} \PYG{l+m+mi}{200}
+    \PYG{n}{p1\PYGZus{}values} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{100}\PYG{p}{,} \PYG{n}{endpoint}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{)}
+    \PYG{n}{loop\PYGZus{}iterations\PYGZus{}tot} \PYG{o}{=} \PYG{p}{[]}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{tqdm}\PYG{o}{.}\PYG{n}{tqdm}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{10}\PYG{p}{)):}
+        \PYG{c+c1}{\PYGZsh{} Do experiment several times (10) and take average to deal with randomness}
+        \PYG{n}{loop\PYGZus{}iterations} \PYG{o}{=} \PYG{p}{[]}
+        \PYG{k}{for} \PYG{n}{p1} \PYG{o+ow}{in} \PYG{n}{p1\PYGZus{}values}\PYG{p}{:}
+            \PYG{n}{R}\PYG{p}{,} \PYG{n}{M} \PYG{o}{=} \PYG{n}{main}\PYG{p}{(}\PYG{n}{n} \PYG{o}{=} \PYG{n}{n}\PYG{p}{,} \PYG{n}{M\PYGZus{}size} \PYG{o}{=} \PYG{n}{M\PYGZus{}size}\PYG{p}{,} \PYG{n}{p1} \PYG{o}{=} \PYG{n}{p1}\PYG{p}{,} \PYG{n}{p2} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{)}
+            \PYG{n}{loop\PYGZus{}iterations}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{R}\PYG{p}{))}
+        \PYG{n}{loop\PYGZus{}iterations\PYGZus{}tot}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{loop\PYGZus{}iterations}\PYG{p}{)}
+    \PYG{n}{loop\PYGZus{}iterations\PYGZus{}tot} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{loop\PYGZus{}iterations\PYGZus{}tot}\PYG{p}{)}\PYG{o}{.}\PYG{n}{T}
+    \PYG{n}{loop\PYGZus{}iterations\PYGZus{}averages} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{average}\PYG{p}{(}\PYG{n}{loop\PYGZus{}iterations\PYGZus{}tot}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Plotting experiment 2\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{()}
+
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{p1\PYGZus{}values}\PYG{p}{,} \PYG{n}{loop\PYGZus{}iterations\PYGZus{}averages}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Averaged loop iterations for \PYGZdl{}S=200\PYGZdl{} and varying \PYGZdl{}p\PYGZus{}1\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}\PYGZdl{}p\PYGZus{}1\PYGZdl{} values\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}yscale}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}log\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Loop iterations \PYGZdl{}T\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{dir\PYGZus{}path}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}p1\PYGZus{}experiment.svg\PYGZdq{}}\PYG{p}{))}
+
+\PYG{k}{if} \PYG{n}{do\PYGZus{}experiment\PYGZus{}3} \PYG{o}{==} \PYG{k+kc}{True}\PYG{p}{:}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Running experiment 3:\PYGZdq{}}\PYG{p}{)}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Number of loop iterations for different values of p1=p2=p\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{5}
+    \PYG{n}{M\PYGZus{}size} \PYG{o}{=} \PYG{l+m+mi}{100}
+    \PYG{n}{p\PYGZus{}values} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{100}\PYG{p}{,} \PYG{n}{endpoint}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{)}
+    \PYG{n}{loop\PYGZus{}iterations\PYGZus{}tot} \PYG{o}{=} \PYG{p}{[]}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{tqdm}\PYG{o}{.}\PYG{n}{tqdm}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{10}\PYG{p}{)):}
+        \PYG{c+c1}{\PYGZsh{} Do experiment several times (10) and take average to deal with randomness}
+        \PYG{n}{loop\PYGZus{}iterations} \PYG{o}{=} \PYG{p}{[]}
+        \PYG{k}{for} \PYG{n}{p} \PYG{o+ow}{in} \PYG{n}{p\PYGZus{}values}\PYG{p}{:}
+            \PYG{n}{R}\PYG{p}{,} \PYG{n}{M} \PYG{o}{=} \PYG{n}{main}\PYG{p}{(}\PYG{n}{n} \PYG{o}{=} \PYG{n}{n}\PYG{p}{,} \PYG{n}{M\PYGZus{}size} \PYG{o}{=} \PYG{n}{M\PYGZus{}size}\PYG{p}{,} \PYG{n}{p1} \PYG{o}{=} \PYG{n}{p}\PYG{p}{,} \PYG{n}{p2} \PYG{o}{=} \PYG{n}{p}\PYG{p}{)}
+            \PYG{n}{loop\PYGZus{}iterations}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{R}\PYG{p}{))}
+        \PYG{n}{loop\PYGZus{}iterations\PYGZus{}tot}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{loop\PYGZus{}iterations}\PYG{p}{)}
+    \PYG{n}{loop\PYGZus{}iterations\PYGZus{}tot} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{loop\PYGZus{}iterations\PYGZus{}tot}\PYG{p}{)}\PYG{o}{.}\PYG{n}{T}
+    \PYG{n}{loop\PYGZus{}iterations\PYGZus{}averages} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{average}\PYG{p}{(}\PYG{n}{loop\PYGZus{}iterations\PYGZus{}tot}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Plotting experiment 3\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{fig}\PYG{p}{,} \PYG{n}{ax} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{()}
+
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{p\PYGZus{}values}\PYG{p}{,} \PYG{n}{loop\PYGZus{}iterations\PYGZus{}averages}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Averaged loop iterations for \PYGZdl{}S=100\PYGZdl{} and varying \PYGZdl{}p\PYGZus{}1=p\PYGZus{}2=p\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}\PYGZdl{}p\PYGZdl{} values\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}yscale}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}log\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Loop iterations \PYGZdl{}T\PYGZdl{}\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{dir\PYGZus{}path}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}p\PYGZus{}experiment.svg\PYGZdq{}}\PYG{p}{))}
+\end{Verbatim}

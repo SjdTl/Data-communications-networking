@@ -1,0 +1,40 @@
+\documentclass[11pt,fleqn]{article}
+
+\usepackage{a4wide}
+
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{psfrag}
+\usepackage{color}
+\usepackage[dvips]{graphicx}
+%\usepackage{hyperref}
+%\usepackage[widespace]{fourier}
+%\usepackage{txfonts}
+\usepackage{times}
+%\usepackage{mathfont}
+\usepackage{subcaption}
+\usepackage{framed}
+\usepackage{svg}
+\usepackage{minted}
+
+\begin{document}
+	\begin{center}
+		{\Large EE2T21 Data Communications Networking - 2024\\[0.1em]
+			Bonus Assignment \# 1 \\}
+	\end{center}
+
+    \parbox[l][17mm][t]{\textwidth}{Names: Sjoerd Terlouw \hspace{6.66cm}
+			Student ID: 5852455}
+	\section{Abstract}
+    Model of the S\&W protocol in Python. The implementation consists of two functions simulation the sender and receiver. The simulation of corruption and keeping track of the position in the message is done by the main function. The corruption itself is simulated by a flag ($1$ or $0$). 
+    Using this model several expirements done.
+
+    
+
+    \newpage
+    \section{Code}
+    The code is also provided seperately.
+    \inputminted[breaklines=true]{python3}{Stop-and-wait_protocol.py}
+\end{document}
